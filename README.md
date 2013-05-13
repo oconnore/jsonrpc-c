@@ -17,8 +17,7 @@ and saw no need for HTTP.
 
 How?
 ----
-It depends on libev (was already used on the embedded app) and includes cJSON (with a small patch on my fork).
-No further dependencies.
+It depends on libev and Jansson.
 
 ###Testing
 
@@ -26,13 +25,15 @@ Run `autoreconf -i`  before `./configure` and `make`
 
 Test the example server by running it and typing: 
 
-`echo "{\"method\":\"sayHello\"}" | nc localhost 1234`
+`echo '{"jsonrpc":"2.0","method":"sayHello","params":["Foo"],"id":340958}' | nc localhost 1234`
+`{"jsonrpc":"2.0","result":"Hello Foo!\n","id":340958}`
 
 or
 
-`echo "{\"method\":\"exit\"}" | nc localhost 1234`
+`echo '{"jsonrpc":"2.0","method":"exit"}' | nc localhost 1234`
 
 Who?
 ----
 
 @hmngomes
+@eric_oconnor
