@@ -7,6 +7,8 @@
 
 #include "jsonrpc-c.h"
 
+#ifdef DEBUG
+
 //
 // Debugging
 //
@@ -254,8 +256,7 @@ void handle_buffer(jrpc_connection *conn) {
 #endif
       send_error(conn,
                  JRPC_PARSE_ERROR,
-                 strdup("Parse error. "
-                        "Invalid JSON was received by the server."),
+                 "Parse error. Invalid JSON was received by the server.",
                  NULL, NULL);
       return close_connection(conn->server->loop, &conn->io);
     }

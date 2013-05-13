@@ -34,9 +34,11 @@ json_t* say_hello(jrpc_context *ctx, json_t *params, json_t *id) {
     snprintf(buf, 254, "Hello %s!\n", json_string_value(param));
     json_decref(param);
   } else {
+#ifdef DEBUG
     ctx->error_code=-1;
     char *tmp=strdup("Missing name parameter!");
     ctx->error_msg=tmp;
+#endif
   }
   return json_string(buf);
 }
@@ -51,7 +53,9 @@ int main(void) {
   jrpc_register_procedure(&my_server, say_hello, "sayHello", NULL );
   jrpc_register_procedure(&my_server, exit_server, "exit", NULL );
   jrpc_server_run(&my_server);
+#ifdef DEBUG
   jrpc_error *err=&my_server.error;
+#endif
   jrpc_server_destroy(&my_server);
   return 0;
 }
