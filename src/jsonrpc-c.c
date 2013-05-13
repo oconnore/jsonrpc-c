@@ -165,7 +165,11 @@ int invoke_procedure(jrpc_server *server,
       ctx.data = server->procedures[i].data;
       returned = server->procedures[i].function(&ctx, params, id);
       if( ctx.error_code == 0) {
-        result=send_result(conn, returned, id);
+        if( id != NULL ) {
+          result=send_result(conn, returned, id);
+        } else {
+          result=0;
+        }
       } else {
         result=send_error(conn,
                           ctx.error_code, ctx.error_msg,
@@ -191,7 +195,7 @@ int eval_request(jrpc_server* server,
                  json_t* root) {
   char *version, *method;
   json_t *params, *id;
-  if( json_unpack(root, "{s:s,s:s,s:o,s:o}",
+  if( json_unpack(root, "{s:s,s:s,s?:o,s?:o}",
                   "jsonrpc", &version,
                   "method", &method,
                   "params", &params,
